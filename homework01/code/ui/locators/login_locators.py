@@ -1,6 +1,6 @@
 from selenium.webdriver.common.by import By
 
-LOGIN_BUTTON_LOCATOR = (By.CLASS_NAME, 'responseHead-module-button-1BMAy4')
+LOGIN_BUTTON_LOCATOR = (By.CSS_SELECTOR, 'div[class*="responseHead-module-button"]')
 EMAIL_INPUT_LOCATOR = (By.NAME, 'email')
 PASSWORD_INPUT_LOCATOR = (By.NAME, 'password')
-SUBMIT_BUTTON_LOCATOR = (By.CLASS_NAME, 'authForm-module-button-2G6lZu')
+SUBMIT_BUTTON_LOCATOR = (By.CSS_SELECTOR, 'div[class*=authForm-module-button]')

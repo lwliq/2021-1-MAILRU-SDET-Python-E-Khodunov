@@ -9,7 +9,24 @@ from selenium.webdriver.common.keys import Keys
 
 class TestOne(BaseCase):
     @pytest.mark.UI
-    def test_login(self, login, logout):
+    def test_login(self, logout):
+
+        self.spinner_wait(timeout=1)
+        self.click(login_locators.LOGIN_BUTTON_LOCATOR)
+
+        self.input_text(
+            text=self.credentials['email'],
+            locator=login_locators.EMAIL_INPUT_LOCATOR
+        )
+
+        self.input_text(
+            text=self.credentials['password'],
+            locator=login_locators.PASSWORD_INPUT_LOCATOR
+        )
+
+        self.click(login_locators.SUBMIT_BUTTON_LOCATOR)
+        self.spinner_wait(timeout=1)
+
         instruction_module = self.find(basic_locators.INSTRUCTION_MODULE_LOCATOR)
         assert instruction_module.is_displayed()
 
@@ -20,8 +37,12 @@ class TestOne(BaseCase):
         login_button = self.find(login_locators.LOGIN_BUTTON_LOCATOR, 15)
         assert login_button.is_displayed()
 
+
+@pytest.mark.usefixtures("login", "logout")
+class TestTwo(BaseCase):
+
     @pytest.mark.UI
-    def test_change_profile(self, login, logout):
+    def test_change_profile(self):
         self.spinner_wait(timeout=1)
         self.click(basic_locators.PROFILE_RIBBON_BUTTON)
 
@@ -50,6 +71,7 @@ class TestOne(BaseCase):
         )
 
         self.driver.refresh()
+        self.spinner_wait()
 
         assert (
             fio == self.find(profile_locators.FIO_INPUT_LOCATOR).get_attribute('value') and
@@ -89,7 +111,7 @@ class TestOne(BaseCase):
             )
         ]
     )
-    def test_pages(self, login, logout, button_locator, expected_locator, expected_value):
+    def test_pages(self, button_locator, expected_locator, expected_value):
         self.click(button_locator)
         element = self.find(expected_locator)
         assert expected_value == element.get_attribute('innerHTML')
