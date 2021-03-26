@@ -72,9 +72,7 @@ class BaseCase:
         except TimeoutException:
             pass
 
-    @pytest.fixture(scope='function')
-    def login(self):
-
+    def my_login(self):
         self.spinner_wait(timeout=1)
         self.click(login_locators.LOGIN_BUTTON_LOCATOR)
 
@@ -90,6 +88,10 @@ class BaseCase:
 
         self.click(login_locators.SUBMIT_BUTTON_LOCATOR)
         self.spinner_wait(timeout=1)
+
+    @pytest.fixture(scope='function')
+    def login(self):
+        self.my_login()
 
     @pytest.fixture(scope='function')
     def logout(self):

@@ -11,21 +11,7 @@ class TestOne(BaseCase):
     @pytest.mark.UI
     def test_login(self, logout):
 
-        self.spinner_wait(timeout=1)
-        self.click(login_locators.LOGIN_BUTTON_LOCATOR)
-
-        self.input_text(
-            text=self.credentials['email'],
-            locator=login_locators.EMAIL_INPUT_LOCATOR
-        )
-
-        self.input_text(
-            text=self.credentials['password'],
-            locator=login_locators.PASSWORD_INPUT_LOCATOR
-        )
-
-        self.click(login_locators.SUBMIT_BUTTON_LOCATOR)
-        self.spinner_wait(timeout=1)
+        self.my_login()
 
         instruction_module = self.find(basic_locators.INSTRUCTION_MODULE_LOCATOR)
         assert instruction_module.is_displayed()
