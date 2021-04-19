@@ -8,3 +8,11 @@ class ElementIsPresentException(Exception):
 
 class ElementIsNotInteractableException(Exception):
     pass
+
+
+class UnsupportedRegionActionTypeException(Exception):
+    pass
+
+
+class UnsupportedBannerTypeException(Exception):
+    pass

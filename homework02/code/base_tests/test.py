@@ -35,8 +35,6 @@ class TestInvalidLogin(BaseCase):
             email='test@test.com'
         )
 
-        notification = login_page.find(login_page.locators.MYCOM_ERROR_NOTIFICATION)
-
         assert login_page.is_element_present(
             locator=login_page.locators.MYCOM_ERROR_NOTIFICATION,
         )
@@ -54,9 +52,34 @@ class TestCampaigns(BaseCase):
         campaign_page = self.dashboard_page.go_to_new_campaign()
 
         campaign_name = "test_new_campaign_" + str(datetime.now())
+
+        campaign_info = {
+            'campaign_type': 'traffic',
+            'campaign_url': 'https://www.google.com/',
+            'sex_checkbox': 'sex-male',
+            'age_range': '25-60',
+            'region_to_add': 'Москва',
+            'region_to_exclude': 'Воронеж',
+            'region_to_remove': 'Россия',
+            'interest_soc_dem_group': 'Группы телесмотрения',
+            'interest_soc_dem_item': 'Смотрят ТВ cредне',
+            'interest_group': 'Авто',
+            'interest_item': 'Авто внедорожники',
+            'full_time_preset': 'workTime',
+            'date_from': '11.12.2020',
+            'date_to': '11.12.2022',
+            'budget_daily': '1000',
+            'budget_total': '1000000',
+            'banner_type': 'Мультиформат',
+            'banner_title': 'Тест',
+            'banner_text': 'Тест',
+            'banner_info': 'ОГРН 12233445555556',
+            'image_file_path': self.file_path("banner_test_image.jpeg")
+        }
+
         campaign_page.create_new_campaign(
             campaign_name=campaign_name,
-            image_file_path=self.file_path("banner_test_image.jpeg")
+            campaign_info=campaign_info
         )
 
         assert self.dashboard_page.is_element_present_template(
