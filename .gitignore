@@ -137,4 +137,5 @@ dmypy.json
 # pytype static type analyzer
 .pytype/
 
-chromedriver
+tmp/
+
