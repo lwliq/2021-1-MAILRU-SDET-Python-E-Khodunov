@@ -30,6 +30,10 @@ class ImageUploadFailedException(Exception):
     pass
 
 
+class WrongLogicTypeException(Exception):
+    pass
+
+
 class ApiClient:
 
     def __init__(self, base_url, login_url):
@@ -201,3 +205,119 @@ class ApiClient:
                             params=params, headers=headers)['items']
 
         return [s_id['id'] for s_id in ids if (s_id['status'] == status)]
+
+    @allure.step('Creating campaign {campaign_name}')
+    def create_campaign(self, campaign_name, file_name, file_path):
+        url_id = self.get_url_id('https://google.com/')
+        image_600x600_id = self.post_image_upload(file_name, file_path, 600, 600)
+        image_1080x607_id = self.post_image_upload(file_name, file_path, 1080, 607)
+        icon_256x256_id = self.post_image_upload(file_name, file_path, 256, 256)
+
+        banner_info = {
+            'content': {
+                'image_600x600': {'id': image_600x600_id},
+                'image_1080x607': {'id': image_1080x607_id},
+                'icon_256x256': {'id': icon_256x256_id}
+            },
+            'name': campaign_name,
+            'textblocks': {
+                'cta_sites_full': {'text': 'visitSite'},
+                'text_90': {'text': 'Тест'},
+                'title_25': {'text': 'Тест'}
+            },
+            'urls': {
+                'primary': {'id': url_id}
+            }
+        }
+
+        targetings_info = {
+            'age': {
+                'age_list': [i for i in range(60) if i > 12],
+                'expand': True
+            },
+            'fulltime': {
+                'flags': ["use_holidays_moving", "cross_timezone"],
+                'mon': [i for i in range(24)]
+            },
+            'geo': {'regions': [188]},
+            'interests': [],
+            'interests_soc_dem': [],
+            'mobile_operators': [],
+            'mobile_types': ["tablets", "smartphones"],
+            'mobile_vendors': [],
+            'pads': [102634, 102643],
+            'segments': [],
+            'sex': ["male", "female"],
+            'split_audience': [i + 1 for i in range(10)]
+        }
+
+        payload = {
+            'autobidding_mode': 'second_price_mean',
+            'banners': [banner_info],
+            'enable_offline_goals': False,
+            'enable_utm': True,
+            'max_price': '0',
+            'mixing': 'fastest',
+            'name': campaign_name,
+            'objective': 'traffic',
+            'package_id': 811,
+            'price': '10.0',
+            'targetings': targetings_info
+        }
+
+        campaign_id, banner_ids = self.post_campaign_create(payload)
+
+        return campaign_id, banner_ids
+
+    @allure.step('Deleting campaign id={campaign_id}')
+    def delete_campaign(self, campaign_id, banner_ids):
+        for b_id in banner_ids:
+            self.post_banner_delete(b_id)
+
+        self.post_campaign_delete(campaign_id)
+
+    def check_if_campaign_has_status(self, campaign_id, status):
+        return campaign_id in self.get_campaigns_ids_list(status)
+
+    @allure.step('Creating segment {segment_name}')
+    def create_segment(self, segment_name, logic_type='or', pass_condition=None):
+        relations = [
+            {
+                'object_type': "remarketing_player",
+                'params': {
+                    'type': "positive",
+                    'left': 150,
+                    'right': 25
+                }
+            },
+            {
+                'object_type': "remarketing_payer",
+                'params': {
+                    'type': "positive",
+                    'left': 170,
+                    'right': 10
+                }
+            }
+        ]
+
+        if logic_type == 'or':
+            pass_condition = 1
+        elif logic_type == 'and':
+            pass_condition = len(relations)
+        elif logic_type == 'not':
+            pass_condition = 0
+        elif logic_type != 'rule':
+            raise WrongLogicTypeException
+
+        payload = {
+            'logicType': logic_type,
+            'name': segment_name,
+            'pass_condition': pass_condition,
+            'relations': relations
+        }
+
+        segment_id = self.post_segment_create(payload)
+        return segment_id
+
+    def check_if_segment_exists(self, segment_id):
+        return segment_id in self.get_segments_ids_list()
