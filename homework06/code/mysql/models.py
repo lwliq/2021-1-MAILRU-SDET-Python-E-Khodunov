@@ -4,8 +4,8 @@ from sqlalchemy.ext.declarative import declarative_base
 Base = declarative_base()
 
 
-class Task01(Base):
-    __tablename__ = 'task01'
+class RequestsCount(Base):
+    __tablename__ = 'requests_count'
 
     def __repr__(self):
         return f"<Task01(" \
@@ -17,8 +17,8 @@ class Task01(Base):
     count = Column(Integer, nullable=False)
 
 
-class Task02(Base):
-    __tablename__ = 'task02'
+class RequestsCountByType(Base):
+    __tablename__ = 'requests_count_by_type'
 
     def __repr__(self):
         return f"<Task02(" \
@@ -32,11 +32,11 @@ class Task02(Base):
     count = Column(Integer, nullable=False)
 
 
-class Task03(Base):
-    __tablename__ = 'task03'
+class Top10MostFrequentLocations(Base):
+    __tablename__ = 'top_10_most_frequent_locations'
 
     def __repr__(self):
-        return f"<Task03(" \
+        return f"<Top10MostFrequentLocations(" \
                f"id='{self.id}'," \
                f"location='{self.location}'," \
                f"count='{self.count}'," \
@@ -47,11 +47,11 @@ class Task03(Base):
     count = Column(Integer, nullable=False)
 
 
-class Task04(Base):
-    __tablename__ = 'task04'
+class Top5LocationsBySize(Base):
+    __tablename__ = 'top_5_locations_by_size'
 
     def __repr__(self):
-        return f"<Task04(" \
+        return f"<Top5LocationsBySize(" \
                f"id='{self.id}'," \
                f"ip='{self.ip}'," \
                f"location='{self.location}'," \
@@ -66,11 +66,11 @@ class Task04(Base):
     size = Column(Integer, nullable=False)
 
 
-class Task05(Base):
-    __tablename__ = 'task05'
+class Top5MostFrequentIps(Base):
+    __tablename__ = 'top_5_most_frequent_ips'
 
     def __repr__(self):
-        return f"<Task05(" \
+        return f"<Top5MostFrequentIps(" \
                f"id='{self.id}'," \
                f"ip='{self.ip}'," \
                f"count='{self.count}'," \

@@ -13,6 +13,26 @@ class MySQLBase:
     def get_file_path(self, file_name):
         return os.path.join(self.repo_root, 'tests', 'files', file_name)
 
+    def compare_models_to_dicts_by_count(self, models, dicts):
+        if len(models) != len(dicts):
+            return False
+
+        for i in range(len(models)):
+            if models[i].count != dicts[i]['count']:
+                return False
+
+        return True
+
+    def compare_models_to_dicts_by_size(self, models, dicts):
+        if len(models) != len(dicts):
+            return False
+
+        for i in range(len(models)):
+            if models[i].size != dicts[i]['size']:
+                return False
+
+        return True
+
     @pytest.fixture(scope='function', autouse=True)
     def setup(self, mysql_client, repo_root):
         self.mysql = mysql_client
