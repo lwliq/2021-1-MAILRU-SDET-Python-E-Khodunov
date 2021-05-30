@@ -23,7 +23,7 @@ def update_user_surname(name):
     if SURNAME_DATA.get(name):
         if surname := request.json['surname']:
             SURNAME_DATA[name] = surname
-            return jsonify(f'Successfully updated surname to {surname} of user {name}'), 200
+            return jsonify(f'Successfully updated surname to {surname} of user {name}'), 201
         else:
             return jsonify(f'Bad request'), 400
     else:
@@ -48,4 +48,3 @@ def shutdown_server():
 def shutdown():
     shutdown_server()
     return jsonify('OK, Exiting.'), 200
-

@@ -38,8 +38,9 @@ class TestMock(BaseTest):
         self.surname_data[self.username] = surname
 
         new_surname = 'testtesttest'
-        self.mock_client.update_surname(self.username, new_surname)
+        status, _ = self.mock_client.update_surname(self.username, new_surname)
 
+        assert status['code'] == 201
         assert self.surname_data[self.username] == new_surname
 
     def test_update_not_existing_surname(self):
@@ -54,8 +55,9 @@ class TestMock(BaseTest):
         surname = 'testtest'
         self.surname_data[self.username] = surname
 
-        self.mock_client.delete_surname(self.username)
+        status, _ = self.mock_client.delete_surname(self.username)
 
+        assert status['code'] == 200
         assert self.username not in self.surname_data.keys()
 
     def test_delete_not_existing_surname(self):

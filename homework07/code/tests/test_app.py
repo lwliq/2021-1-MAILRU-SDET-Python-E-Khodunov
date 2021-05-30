@@ -17,12 +17,15 @@ class TestApp(BaseTest):
 
     def test_add_get_user(self):
 
-        _, data = self.app_client.add_user(self.username)
+        status, data = self.app_client.add_user(self.username)
         user_id = data['user_id']
 
-        _, data = self.app_client.get_user(self.username)
+        assert status['code'] == 201
+
+        status, data = self.app_client.get_user(self.username)
         user_id_from_get = data['user_id']
 
+        assert status['code'] == 200
         assert user_id == user_id_from_get
 
     def test_get_non_existent_user(self):
@@ -40,8 +43,9 @@ class TestApp(BaseTest):
 
         self.app_client.add_user(self.username)
 
-        _, data = self.app_client.get_user(self.username)
+        status, data = self.app_client.get_user(self.username)
 
+        assert status['code'] == 200
         assert isinstance(data['age'], int)
         assert 0 <= data['age'] <= 100
 
@@ -52,7 +56,9 @@ class TestApp(BaseTest):
 
         self.app_client.add_user(self.username)
 
-        _, data = self.app_client.get_user(self.username)
+        status, data = self.app_client.get_user(self.username)
+
+        assert status['code'] == 200
         assert data['surname'] == 'Zaitceva'
         self.surname_data.pop(self.username)
 
@@ -60,10 +66,6 @@ class TestApp(BaseTest):
 
         self.app_client.add_user(self.username)
 
-        _, data = self.app_client.get_user(self.username)
+        status, data = self.app_client.get_user(self.username)
+        assert status['code'] == 200
         assert data['surname'] is None
-
-
-
-
-
