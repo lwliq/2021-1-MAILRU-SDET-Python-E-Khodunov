@@ -1,7 +1,6 @@
 import sqlalchemy
 from sqlalchemy import inspect
-from sqlalchemy.engine import Connection
-from sqlalchemy.orm import sessionmaker, Session
+from sqlalchemy.orm import sessionmaker
 
 from mysql.models import Base
 
